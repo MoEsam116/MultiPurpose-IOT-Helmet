@@ -9,6 +9,7 @@
  *
  * Copyright (c) 2023 Ayman.
  * All rights reserved.
+ *
  ******************************************************************************
  */
 
@@ -40,6 +41,8 @@ void (*SYSTICK_CALL_BACK_PTR_TO_FUNC)(void) = NULL ;
 volatile uint32_t STK_PeriodicValue ;
 
 STK_MOD_t SYSTICK_MODE = STK_MOD_NONE  ;
+
+float _f32TickTime ;
 
 /*==============================================================================================================================================
  * GLOBAL VARIABLES SECTION END
@@ -162,21 +165,35 @@ void SYSTICK_Delayus(uint32_t Copy_u32TimeInMicroSeconds)
  */
 void SYSTICK_vSetIntervalSingle( uint32_t Copy_u32Ticks , void(*pvCallBackFunc)(void) )
 {
-	/* Set Clock Source */
-	if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
+	static uint8_t Local_u8Indicator = 0 ;
+
+	/* To Reset Timer When Function Called More Than once */
+	SYSTICK->SYST_CSR &= (~(1<<CSR_ENABLE));
+	SYSTICK->SYST_CVR = 0u ;
+
+	/* To Ensure Setting Clock Source One Time Only */
+	if( Local_u8Indicator == 0 )
 	{
-		SYSTICK-> SYST_CSR |= ( 1 << CSR_CLKSOURCE ) ;
-	}
-	else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
-	{
-		SYSTICK->SYST_CSR &= ( ~ ( 1 << CSR_CLKSOURCE ) ) ;
+		/* Set Clock Source */
+		if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
+		{
+			SYSTICK-> SYST_CSR |= ( 1 << CSR_CLKSOURCE ) ;
+			_f32TickTime = AHB_TICK_TIME ;
+		}
+		else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
+		{
+			SYSTICK->SYST_CSR &= ( ~ ( 1 << CSR_CLKSOURCE ) ) ;
+			_f32TickTime = AHB_BY8_TICK_TIME ;
+		}
+
+		Local_u8Indicator = 1 ;
 	}
 
 	/* Load Value */
 	SYSTICK->SYST_RVR = Copy_u32Ticks ;
 
-	/* Clear the Current */
-	SYSTICK->SYST_CVR = 0 ;
+	/* Start Timer */
+	SYSTICK->SYST_CSR |= (1<<CSR_ENABLE) ;
 
 	/* Assign Call BAck Function */
 	SYSTICK_CALL_BACK_PTR_TO_FUNC = pvCallBackFunc ;
@@ -186,9 +203,6 @@ void SYSTICK_vSetIntervalSingle( uint32_t Copy_u32Ticks , void(*pvCallBackFunc)(
 
 	/* Enable Systick Exception */
 	SYSTICK->SYST_CSR |= (1<<CSR_TICKINT) ;
-
-	/* Start Timer */
-	SYSTICK->SYST_CSR |= (1<<CSR_ENABLE) ;
 
 }
 
@@ -201,15 +215,31 @@ void SYSTICK_vSetIntervalSingle( uint32_t Copy_u32Ticks , void(*pvCallBackFunc)(
  */
 void SYSTICK_vSetPeriodicInterval( uint32_t Copy_u32Ticks , void(*pvCallBackFunc)(void) )
 {
-	/* Set Clock Source */
-	if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
+	static uint8_t Local_u8Indicator = 0 ;
+
+	/* To Reset Timer When Function Called More Than once */
+	SYSTICK->SYST_CSR &= (~(1<<CSR_ENABLE));
+	SYSTICK->SYST_CVR = 0u ;
+
+	/* To Ensure Setting Clock Source One Time Only */
+	if( Local_u8Indicator == 0 )
 	{
-		SYSTICK-> SYST_CSR |= ( 1 << CSR_CLKSOURCE ) ;
+		/* Set Clock Source */
+		if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
+		{
+			SYSTICK-> SYST_CSR |= ( 1 << CSR_CLKSOURCE ) ;
+			_f32TickTime = AHB_TICK_TIME ;
+
+		}
+		else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
+		{
+			SYSTICK->SYST_CSR &= ( ~ ( 1 << CSR_CLKSOURCE ) ) ;
+			_f32TickTime = AHB_BY8_TICK_TIME ;
+		}
+
+		Local_u8Indicator = 1 ;
 	}
-	else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
-	{
-		SYSTICK->SYST_CSR &= ( ~ ( 1 << CSR_CLKSOURCE ) ) ;
-	}
+
 
 	/* Load Value */
 	SYSTICK->SYST_RVR = Copy_u32Ticks ;
@@ -261,18 +291,7 @@ uint32_t SYSTICK_u32GetElapsedTimems(void)
 {
 	uint32_t Local_u32ElapsedTime ;
 
-	float Local_f32TickTime ;
-
-	if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
-	{
-		Local_f32TickTime = AHB_TICK_TIME ;
-	}
-	else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
-	{
-		Local_f32TickTime = AHB_BY8_TICK_TIME ;
-	}
-
-	Local_u32ElapsedTime = ( ( ( SYSTICK->SYST_RVR ) - ( SYSTICK->SYST_CVR ) ) * Local_f32TickTime  * _10POW3 ) ;
+	Local_u32ElapsedTime = ( ( ( SYSTICK->SYST_RVR ) - ( SYSTICK->SYST_CVR ) ) * _f32TickTime  * _10POW3 ) ;
 
 	return Local_u32ElapsedTime ;
 }
@@ -287,18 +306,7 @@ uint32_t SYSTICK_u32GetElapsedTimeus (void)
 {
 	uint32_t Local_u32ElapsedTime  ;
 
-	float Local_f32TickTime ;
-
-	if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )
-	{
-		Local_f32TickTime = AHB_TICK_TIME ;
-	}
-	else if( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB_BY8 )
-	{
-		Local_f32TickTime = AHB_BY8_TICK_TIME ;
-	}
-
-	Local_u32ElapsedTime = ( ( ( SYSTICK->SYST_RVR ) - ( SYSTICK->SYST_CVR ) ) * Local_f32TickTime  * _10POW6 ) ;
+	Local_u32ElapsedTime = (uint32_t)( ( (uint32_t)( SYSTICK->SYST_RVR ) - (uint32_t)( SYSTICK->SYST_CVR ) ) * ( _f32TickTime  * (float)_10POW6 ) ) ;
 
 	return Local_u32ElapsedTime ;
 }
@@ -313,11 +321,7 @@ uint32_t SYSTICK_u32GetRemainingTimems (void)
 {
 	uint32_t Local_u32RemainingTime = 0 ;
 
-	float Local_f32TickTime ;
-
-	Local_f32TickTime = ( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )?( AHB_TICK_TIME ):( AHB_BY8_TICK_TIME ) ;
-
-	Local_u32RemainingTime = ( ( SYSTICK->SYST_CVR ) * Local_f32TickTime * _10POW3 ) ;
+	Local_u32RemainingTime = ( ( SYSTICK->SYST_CVR ) * _f32TickTime * _10POW3 ) ;
 
 	return Local_u32RemainingTime ;
 }
@@ -332,11 +336,7 @@ uint32_t SYSTICK_u32GetRemainingTimeus (void)
 {
 	uint32_t Local_u32RemainingTime = 0 ;
 
-	float Local_f32TickTime ;
-
-	Local_f32TickTime = ( SYSTICK_TIMER_CONFIG.CLK == SYSTICK_AHB )?( AHB_TICK_TIME ):( AHB_BY8_TICK_TIME ) ;
-
-	Local_u32RemainingTime = ( ( SYSTICK->SYST_CVR ) * Local_f32TickTime * _10POW6 ) ;
+	Local_u32RemainingTime = ( ( SYSTICK->SYST_CVR ) * _f32TickTime * _10POW6 ) ;
 
 	return Local_u32RemainingTime ;
 }
