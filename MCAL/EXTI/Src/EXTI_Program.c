@@ -20,8 +20,8 @@
 
 #include <stdint.h>
 
-#include "../../../LIB/ErrType.h"
-#include "../../../LIB/STM32F103xx.h"
+#include "../Inc/ErrType.h"
+#include "../Inc/STM32F103xx.h"
 
 #include "../Inc/EXTI_Interface.h"
 #include "../Inc/EXTI_Private.h"
