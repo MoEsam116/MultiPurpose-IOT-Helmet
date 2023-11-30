@@ -6,8 +6,8 @@
 
 /******************* MAIN INCLUDES *********************/
 #include <stdint.h>
-#include "../../../Inc/STM32F103xx.h"
-#include "../../../Inc/ErrTypes.h"
+#include "../../Inc/STM32F103xx.h"
+#include "../../Inc/ErrTypes.h"
 
 
 #include "../Inc/ADC_Interface.h"

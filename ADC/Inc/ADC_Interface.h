@@ -6,7 +6,7 @@
 #ifndef ADC_INC_ADC_INTERFACE_H_
 #define ADC_INC_ADC_INTERFACE_H_
 
-#include "../../../Inc/ErrTypes.h"
+#include "../../Inc/ErrTypes.h"
 /************** MAIN USER DEFINED VARIABLES ************/
 
 /*************************
