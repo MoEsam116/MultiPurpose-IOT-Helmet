@@ -13,6 +13,7 @@
  * @ADC_Number_t enum
  */
 typedef enum {
+	
 	ADC_Number_1,
 	ADC_Number_2,
 }ADC_Number_t;
