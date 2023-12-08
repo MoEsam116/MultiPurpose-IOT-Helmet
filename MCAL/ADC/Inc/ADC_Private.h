@@ -8,7 +8,7 @@
 #define ADC_INC_ADC_PRIVATE_H_
 
 
-static Error_State_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs);
+static ERRORS_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs);
 
 
 #define ADC_MAX_NUMBER		2u

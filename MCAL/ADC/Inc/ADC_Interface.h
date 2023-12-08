@@ -117,7 +117,7 @@ typedef struct {
  * @note			:	This function must be called before Starting single Conversion
  * @warning			:	Do not call this function if you are using ADC in Sequence Conversion
  */
-Error_State_t ADC_u8Init(ADC_Configs_t * ADC_Configs);
+ERRORS_t ADC_u8Init(ADC_Configs_t * ADC_Configs);
 
 /*
  * @function 		:	ADC_u8StartSingleConv
@@ -128,7 +128,7 @@ Error_State_t ADC_u8Init(ADC_Configs_t * ADC_Configs);
  * @note			:	This function must be called after calling ADC_u8Init
  * @warning			:	Do not call this function if you are using ADC in Sequence Conversion
  */
-Error_State_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Reading_Value);
+ERRORS_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Reading_Value);
 
 /*
  * @function 		:	ADC_u8StartSequenceConv
@@ -140,6 +140,6 @@ Error_State_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Rea
  * @note			:	This function must be called Without calling ADC_u8Init
  * @warning			:	Do not call this function if you are using ADC in Single Conversion
  */
-Error_State_t ADC_u8StartSequenceConv(ADC_Configs_t * ADC_Configs , uint16_t * Readings_Arr , uint8_t Arr_Size);
+ERRORS_t ADC_u8StartSequenceConv(ADC_Configs_t * ADC_Configs , uint16_t * Readings_Arr , uint8_t Arr_Size);
 
 #endif /* ADC_INC_ADC_INTERFACE_H_ */

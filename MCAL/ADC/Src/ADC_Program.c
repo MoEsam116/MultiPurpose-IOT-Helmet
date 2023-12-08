@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include "../../../Library/STM32F103xx.h"
 #include "../../../Library/ErrType.h"
+#include "../../../Library/BIT_MATH.h"
 
 
 #include "../Inc/ADC_Interface.h"
@@ -32,9 +33,9 @@ static ADC_REG_t * ADCs[ADC_MAX_NUMBER]	=	{ADC1,ADC2};
  * @note			:	This function must be called before Starting single Conversion
  * @warning			:	Do not call this function if you are using ADC in Sequence Conversion
  */
-Error_State_t ADC_u8Init(ADC_Configs_t * ADC_Configs)
+ERRORS_t ADC_u8Init(ADC_Configs_t * ADC_Configs)
 {
-	Error_State_t Error_Status = OK;
+	ERRORS_t Error_Status = OK;
 
 	if (OK == ADC_CheckConfigs(ADC_Configs))
 	{
@@ -90,9 +91,9 @@ Error_State_t ADC_u8Init(ADC_Configs_t * ADC_Configs)
  * @note			:	This function must be called after calling ADC_u8Init
  * @warning			:	Do not call this function if you are using ADC in Sequence Conversion
  */	
-Error_State_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Reading_Value)
+ERRORS_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Reading_Value)
 {
-	Error_State_t Error_Status = OK;
+	ERRORS_t Error_Status = OK;
 
 	if (OK == ADC_CheckConfigs(ADC_Configs))
 	{
@@ -106,7 +107,7 @@ Error_State_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Rea
 		}
 
 		/*wait on EOC (End of Conversion) FLAG*/
-		while( GET_BIT(ADCs[ADC_Configs->ADC_Num]->ADC_SR,1) == FLAG_RESET);
+		while( GET_BIT(ADCs[ADC_Configs->ADC_Num]->ADC_SR,1) == 0);
 
 		/*Read ADC*/
 		if (ADC_Configs->Data_Align == ADC_DATA_Align_R)
@@ -141,10 +142,10 @@ Error_State_t ADC_u8StartSingleConv(ADC_Configs_t * ADC_Configs , uint16_t * Rea
  * @note			:	This function must be called Without calling ADC_u8Init
  * @warning			:	Do not call this function if you are using ADC in Single Conversion
  */
-Error_State_t ADC_u8StartSequenceConv(ADC_Configs_t * ADC_Configs , uint16_t * Readings_Arr , uint8_t Arr_Size)
+ERRORS_t ADC_u8StartSequenceConv(ADC_Configs_t * ADC_Configs , uint16_t * Readings_Arr , uint8_t Arr_Size)
 {
 	
-	Error_State_t Error_Status = OK;
+	ERRORS_t Error_Status = OK;
 
 	uint8_t Local_u8Iterator=0;
 
@@ -168,9 +169,9 @@ Error_State_t ADC_u8StartSequenceConv(ADC_Configs_t * ADC_Configs , uint16_t * R
 
 
 /***************** STATIC FUNCTIONS ********************/
-static Error_State_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs)
+static ERRORS_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs)
 {
-	Error_State_t Error_Status =OK;
+	ERRORS_t Error_Status =OK;
 
 	if (ADC_Configs != NULL)
 	{
@@ -205,7 +206,7 @@ static Error_State_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs)
 								}
 							}
 							else{
-								Error_Status = Null_Pointer;
+								Error_Status = NULL_POINTER;
 							}
 						}
 						else{
@@ -230,7 +231,7 @@ static Error_State_t ADC_CheckConfigs(ADC_Configs_t * ADC_Configs)
 		}
 	}
 	else {
-		Error_Status = Null_Pointer;
+		Error_Status = NULL_POINTER;
 	}
 
 	return Error_Status;
