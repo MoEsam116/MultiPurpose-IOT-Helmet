@@ -9,9 +9,9 @@
 
 
 #include <stdint.h>
-#include "STM32F103xx.h"
-#include "ErrTypes.h"
-#include "Timer_Interface.h"
+#include "../Library/STM32F103xx.h"
+#include "../Library/ErrType.h"
+#include "../Inc/Timer_Interface.h"
 
 
 /***********************************

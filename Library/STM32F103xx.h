@@ -122,9 +122,27 @@ typedef struct
 /* ------------------------------- RCC Peripheral Definition -------------------------------- */
 /* ------------------------------------------------------------------------------------------ */
 
-#define RCC ((RCC_REG_t)RCC_BASE_ADDRESS)
+#define RCC ((RCC_REG_t*)RCC_BASE_ADDRESS)
 
+/*==============================================================================================================================================
+ * Clock Control Register definition (CR)
+ *==============================================================================================================================================*/
 
+#define CR_PLLRDY 25 // PLL Ready flag
+#define CR_PLLON 24	 // PLL Enable
+#define CR_CSSON 19	 // Clock security system enable
+#define CR_HSEBYP 18 // HSE Bypass on
+#define CR_HSERDY 17 // HSE Ready flag
+#define CR_HSEON 16	 // HSE Enable
+#define CR_HSIRDY 1	 // HSI Ready flag
+#define CR_HSION 0	 // HSI Enable
+/*==============================================================================================================================================
+ * Clock Configuration Register definition (CFGR)
+ *==============================================================================================================================================*/
+#define CFGR_USBPRE 22	 // USB prescaler
+#define CFGR_PLLMUL 18	 // PLL multiplication factor
+#define CFGR_PLLXTPRE 17 // HSE divider for PLL entry
+#define CFGR_PLLSRC 16	 // PLL entry clock source
 /* ------------------------------------------------------------------------------------------------------ */
 /* ------------------------------- SYSTICK REGISTERS Definition Structure ------------------------------- */
 /* ------------------------------------------------------------------------------------------------------ */
@@ -158,12 +176,12 @@ typedef struct
 /* ------------------------------- NVIC REGISTERS Definition Structure ---------------------------------- */
 /* ------------------------------------------------------------------------------------------------------ */
 
-#define NVIC_ISER   ((volatile uint32_t) 0xE000E100)
-#define NVIC_ICER   ((volatile uint32_t) 0xE000E180)
-#define NVIC_ISPR   ((volatile uint32_t) 0xE000E200)
-#define NVIC_ICPR   ((volatile uint32_t) 0xE000E280)
-#define NVIC_IABR   ((volatile uint32_t) 0xE000E300)
-#define NVIC_IPR    ((volatile uint8_t ) 0xE000E400)
+#define NVIC_ISER   ((volatile uint32_t*) 0xE000E100)
+#define NVIC_ICER   ((volatile uint32_t*) 0xE000E180)
+#define NVIC_ISPR   ((volatile uint32_t*) 0xE000E200)
+#define NVIC_ICPR   ((volatile uint32_t*) 0xE000E280)
+#define NVIC_IABR   ((volatile uint32_t*) 0xE000E300)
+#define NVIC_IPR    ((volatile uint8_t *) 0xE000E400)
 
 
 
@@ -194,7 +212,7 @@ typedef struct{
 /* ------------------------------- SCB Peripheral Definition ----------------------------------- */
 /* --------------------------------------------------------------------------------------------- */
 
-#define SCB ((volatile SCB_Type) 0xE000ED00 )
+#define SCB ((volatile SCB_Type *) 0xE000ED00 )
 
 /* --------------------------------------------------------------------------------------------------- */
 /* ------------------------------- USART REGISTERS Definition Structure ------------------------------ */
@@ -216,7 +234,7 @@ typedef struct{
 /* ------------------------------- USART Peripheral Definition --------------------------------- */
 /* --------------------------------------------------------------------------------------------- */
 
-#define USART1 ( ( volatile USART_t ) 0x40013800 )
+#define USART1 ( ( volatile USART_t *) 0x40013800 )
 
 
 /* --------------------------------------------------------------------------------------------------- */
@@ -293,8 +311,8 @@ typedef struct
 /* ------------------------------- GPIO Peripheral Definition ---------------------------------- */
 /* --------------------------------------------------------------------------------------------- */
 
-#define GPIOA 		((GPIO_REG_t)GPIOA_BASE_ADDRESS)
-#define GPIOB 		((GPIO_REG_t )GPIOB_BASE_ADDRESS)
-#define GPIOC 		((GPIO_REG_t)GPIOC_BASE_ADDRESS)
+#define GPIOA 		((GPIO_REG_t *)GPIOA_BASE_ADDRESS)
+#define GPIOB 		((GPIO_REG_t *)GPIOB_BASE_ADDRESS)
+#define GPIOC 		((GPIO_REG_t *)GPIOC_BASE_ADDRESS)
 
 #endif

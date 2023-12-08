@@ -8,9 +8,8 @@
  ******************************************************************************
  */
 #include "stdint.h"
-#include "../../LIBRARY/BitMath.h"
-#include "../../LIBRARY/STM32F103xx.h"
-#include "../../LIBRARY/ErrTypes.h"
+#include "../Library/STM32F103xx.h"
+#include "../Library/ErrType.h"
 #include "../Inc/AFIO_Interface.h"
 
 /**
