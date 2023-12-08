@@ -9,9 +9,10 @@
  *==============================================================================================================================================*/
 
 #include <stdint.h>
-#include "../Library/STM32F103xx.h"
-#include "../Library/ErrType.h"
-#include "../Library/BIT_MATH.h"
+#include "../../../Library/STM32F103xx.h"
+#include "../../../Library/ErrType.h"
+#include "../../../Library/BIT_MATH.h"
+
 #include "../Inc/UART_Private.h"
 #include "../Inc/UART_Interface.h"
 #include "../../Timer/Inc/Timer_Interface.h"

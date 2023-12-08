@@ -8,11 +8,14 @@
  * INCLUDES SECTION START
  *==============================================================================================================================================*/
 #include <stdint.h>
-#include "../Library/STM32F103xx.h"
-#include "../Library/ErrType.h"
+#include "../../../Library/STM32F103xx.h"
+#include "../../../Library/ErrType.h"
+#include "../../../Library/BIT_MATH.h"
+#include "../../../Library/Config.h"
+
 #include "../Inc/NVIC_Private.h"
 #include "../Inc/NVIC_Interface.h"
-#include "../Library/Config.h"
+
 /*==============================================================================================================================================
  * INCLUDES SECTION END
  *==============================================================================================================================================*/

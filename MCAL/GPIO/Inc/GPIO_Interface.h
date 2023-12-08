@@ -77,6 +77,17 @@ typedef struct
     Output_Mode_t OutputMode;
     Mode_t Mode;
 } Pin_Config_t;
+
+/*==============================================================================================================================================
+ * FUNCTIONS LIKE MACRO
+ *==============================================================================================================================================*/
+
+#define GPIO_PIN_OUTPUT_LOW(PortNumber,PinNumber)		 *((uint32_t*)( 0x40010800UL + (0x400 * PortNumber ) + ( ( PinNumber / 8 ) * 4 ) ) ) = ( 0x1 << (PinNumber * 4)) ; \
+													 	 *((uint32_t*)( 0x40010800UL + (0x400 * PortNumber ) + 0x0C)) &= (~(1<<PinNumber))
+
+#define GPIO_PIN_INPUT_FLOATING(PortNumber,PinNumber) 	 *((uint32_t*)( 0x40010800UL + (0x400 * PortNumber ) + ( ( PinNumber / 8 ) * 4 ) ) ) = ( 0x8 << (PinNumber * 4)) ; \
+												 	 	 *((uint32_t*)( 0x40010800UL + (0x400 * PortNumber ) + 0x0C)) |= (1<<PinNumber)
+
 /*
  * Prototype   : uint8_t GPIO_u8PinInit(const Pin_Config_t *PinConfig)
  * Description : Set Mode of a Pin
