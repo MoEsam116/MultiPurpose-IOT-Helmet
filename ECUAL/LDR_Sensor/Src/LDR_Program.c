@@ -16,7 +16,7 @@
 #include "../../../Library/ErrType.h"
 #include "../../../Library/STM32F103xx.h"
 
-#include "../../../MCAL/EXTI/Inc/ADC_Interface.h"
+#include "../../../MCAL/ADC/Inc/ADC_Interface.h"
 
 #include "../Inc/LDR_Interface.h"
 #include "../Inc/LDR_Private.h"
